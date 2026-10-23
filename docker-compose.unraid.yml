@@ -1,0 +1,25 @@
+# Runs Basket on an Unraid server like other Unraid containers: data in appdata, Unraid's nobody:users
+# user, and labels so it shows up in Unraid's Docker tab with an icon and a WebUI link.
+#
+# Deploy or update from this folder (builds on the server over SSH):
+#   DOCKER_HOST=ssh://root@<server-ip> docker compose -f docker-compose.unraid.yml up -d --build
+services:
+  basket:
+    image: basket:latest
+    container_name: basket
+    build: .
+    user: '99:100'
+    ports:
+      - '3002:3002'
+    environment:
+      PORT: 3002
+      DB_PATH: /data/basket.db
+      # Set this to your own time zone.
+      TZ: Europe/Berlin
+    volumes:
+      - /mnt/user/appdata/basket:/data
+    labels:
+      net.unraid.docker.managed: dockerman
+      net.unraid.docker.webui: 'http://[IP]:[PORT:3002]/'
+      net.unraid.docker.icon: 'https://raw.githubusercontent.com/RaihanKaskandar/basket/main/public/icon-192.png'
+    restart: unless-stopped

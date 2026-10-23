@@ -1,0 +1,17 @@
+services:
+  basket:
+    image: basket:latest
+    build: .
+    ports:
+      - '3002:3002'
+    environment:
+      PORT: 3002
+      DB_PATH: /data/basket.db
+      # Used for "today" and for working out how long ago things were bought.
+      TZ: Europe/Amsterdam
+    volumes:
+      - basket-data:/data
+    restart: unless-stopped
+
+volumes:
+  basket-data:

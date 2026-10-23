@@ -1,0 +1,1795 @@
+/* Mobile first. At 720px the navigation moves from the bottom of the screen to the top bar. */
+
+:root {
+  color-scheme: light dark;
+  --bg: #f5f5f8;
+  --surface: #ffffff;
+  --surface-2: #eeeef3;
+  --text: #17171c;
+  --muted: #6c6c7a;
+  --border: #e4e4eb;
+  --accent: #1d8a4a;
+  --accent-soft: #e5f5ea;
+  --on-accent: #ffffff;
+  --danger: #cf3f55;
+  --radius: 18px;
+  --shadow: 0 1px 2px rgb(20 20 40 / 0.04), 0 8px 24px rgb(20 20 40 / 0.05);
+
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Dark applies automatically with the device, unless Settings forces light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0f0f13;
+    --surface: #19191f;
+    --surface-2: #24242c;
+    --text: #ececf2;
+    --muted: #9a9aa9;
+    --border: #2b2b35;
+    --accent: #4fcf85;
+    --accent-soft: #1d3626;
+    --on-accent: #06210f;
+    --danger: #f0647a;
+    --shadow: none;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0f0f13;
+  --surface: #19191f;
+  --surface-2: #24242c;
+  --text: #ececf2;
+  --muted: #9a9aa9;
+  --border: #2b2b35;
+  --accent: #4fcf85;
+  --accent-soft: #1d3626;
+  --on-accent: #06210f;
+  --danger: #f0647a;
+  --shadow: none;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* No double-tap zoom; taps respond instantly. */
+  touch-action: manipulation;
+}
+
+/* iOS zooms the page when a field under 16px gets focus. */
+input,
+select,
+textarea {
+  font-size: max(16px, 1em);
+}
+
+body {
+  margin: 0;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+/* ---------- Shell ---------- */
+
+.app {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px 12px calc(88px + env(safe-area-inset-bottom));
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+}
+
+/* On a phone the tabs are a bar along the bottom, as in Tidy; wider screens get text tabs in the header. */
+.tabs {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 10;
+  display: flex;
+  gap: 4px;
+  padding: 6px 12px calc(6px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--border);
+}
+
+.tab {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tab[aria-current='page'] {
+  color: var(--accent);
+}
+
+.tab-count {
+  position: absolute;
+  top: 2px;
+  left: calc(50% + 6px);
+  min-width: 18px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* ---------- Shared pieces ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.btn {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.btn.small {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.btn.primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 88%, #000);
+}
+
+.btn.danger {
+  border-color: transparent;
+  background: transparent;
+  color: var(--danger);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.icon-btn:hover {
+  background: var(--surface-2);
+}
+
+.segmented {
+  display: flex;
+  padding: 3px;
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.segmented button {
+  flex: 1;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 9px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.segmented button[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.pill {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pill.accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.empty {
+  padding: 20px 0 8px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.cat-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-size: 17px;
+}
+
+/* ---------- Adding ---------- */
+
+.list-layout,
+.products {
+  display: grid;
+  /* minmax(0, …) so a wide child (the add bar's input and button) can't push the page wider than the screen. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.addbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: -12px -12px 0;
+  padding: 12px 12px 0;
+  background: linear-gradient(var(--bg) 80%, transparent);
+}
+
+.addbar-field,
+.searchbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 6px 6px 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--muted);
+}
+
+.addbar-field:focus-within,
+.searchbar:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.addbar-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 17px;
+}
+
+.addbar-input::placeholder {
+  color: var(--muted);
+}
+
+.addbar-submit {
+  min-height: 40px;
+}
+
+.options {
+  position: absolute;
+  inset: calc(100% + 6px) 12px auto;
+  display: grid;
+  gap: 2px;
+  max-height: min(60dvh, 420px);
+  overflow-y: auto;
+  padding: 6px;
+  animation: rise 0.12s ease-out;
+}
+
+.options-title {
+  padding: 6px 10px 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.option[aria-selected='true'] {
+  background: var(--accent-soft);
+}
+
+.option-plus {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.option-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Suggestions ---------- */
+
+.suggestions {
+  display: grid;
+  gap: 8px;
+}
+
+.suggestions .eyebrow {
+  padding: 0 4px;
+}
+
+.suggestion-row {
+  display: flex;
+  gap: 8px;
+  /* Extra room inside the scroll box so the cards' shadows aren't clipped into a band. */
+  margin: -28px -12px -48px;
+  padding: 28px 12px 48px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.suggestion-row::-webkit-scrollbar {
+  display: none;
+}
+
+.suggestion {
+  position: relative;
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.suggestion-add {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 280px;
+  min-height: 60px;
+  padding: 8px 40px 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+
+.suggestion-add:hover {
+  border-color: var(--accent);
+}
+
+.suggestion-text {
+  display: grid;
+  min-width: 0;
+}
+
+.suggestion-text b,
+.suggestion-text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.suggestion-text small {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: normal;
+}
+
+.suggestion-dismiss {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--muted);
+}
+
+.suggestion-dismiss .icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- List ---------- */
+
+.list {
+  padding: 6px 8px;
+}
+
+.group + .group {
+  border-top: 1px solid var(--border);
+}
+
+.group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px 4px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.count {
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.swipe-row {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.swipe-row.flash {
+  animation: flash 1.5s ease-out;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 12px;
+  /* Vertical scrolling stays with the browser; sideways drags are swipes. */
+  touch-action: pan-y;
+  transition: transform 0.18s ease-out;
+}
+
+.item.dragging {
+  transition: none;
+}
+
+/* While sliding, the row needs a solid face over the action underneath. */
+.item[style] {
+  background: var(--surface-strong, var(--surface));
+}
+
+.swipe-action {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.75;
+  transition: opacity 0.12s;
+}
+
+.swipe-action.armed {
+  opacity: 1;
+}
+
+.swipe-action.right {
+  justify-content: flex-start;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.swipe-action.left {
+  justify-content: flex-end;
+  background: var(--danger);
+}
+
+@keyframes flash {
+  0%,
+  40% {
+    background: var(--accent-soft);
+  }
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+}
+
+.check .icon {
+  width: 26px;
+  height: 26px;
+  padding: 4px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  color: transparent;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  stroke-width: 3;
+}
+
+.check:hover .icon {
+  border-color: var(--accent);
+}
+
+.check[aria-checked='true'] .icon {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.item-main {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 8px 12px 0;
+  text-align: left;
+}
+
+.item-name {
+  font-size: 16px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.qty {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.item-remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.item-remove .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.item-remove:hover,
+.item-remove:focus-visible {
+  background: var(--surface-2);
+  color: var(--danger);
+  opacity: 1;
+}
+
+/* With a mouse it only shows on the row under the pointer, to keep the list calm. */
+@media (hover: hover) {
+  .item-remove {
+    opacity: 0;
+  }
+
+  .item:hover .item-remove,
+  .item-remove:focus-visible {
+    opacity: 1;
+  }
+}
+
+.item-note {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.item.done .item-name {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--muted) 60%, transparent);
+}
+
+.item.done .qty {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.basket-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-right: 6px;
+}
+
+.basket-head .group-title {
+  padding-bottom: 12px;
+}
+
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 36px 24px;
+  text-align: center;
+}
+
+.empty-state.small {
+  padding: 24px;
+}
+
+.empty-state h2 {
+  font-size: 18px;
+}
+
+.empty-state p {
+  max-width: 320px;
+}
+
+.empty-mark {
+  font-size: 34px;
+}
+
+/* ---------- Products ---------- */
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 6px;
+}
+
+.product + .product {
+  border-top: 1px solid var(--border);
+}
+
+.product-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 60px;
+  padding: 8px 6px;
+  text-align: left;
+}
+
+.product-text {
+  display: grid;
+  min-width: 0;
+}
+
+.product-text small {
+  font-size: 13px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+}
+
+.category-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--surface-2);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.category-choice[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chip.own {
+  padding-right: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chip button {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.chip .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.add-alias,
+.own-minutes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.own-minutes .input {
+  width: 140px;
+}
+
+/* ---------- Product catalog ---------- */
+
+.sections {
+  display: flex;
+  gap: 6px;
+  margin: 0 -12px;
+  padding: 0 12px 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sections::-webkit-scrollbar {
+  display: none;
+}
+
+.section-chip {
+  flex: none;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.section-chip[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.catalog-group {
+  display: grid;
+  gap: 4px;
+}
+
+.catalog-group .group-title {
+  padding: 8px 4px 4px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+@media (min-width: 720px) {
+  .tiles {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  .sections {
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+.tile {
+  position: relative;
+}
+
+.tile-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 8px 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  text-align: left;
+}
+
+.tile-add:hover {
+  border-color: var(--accent);
+}
+
+.tile-text {
+  flex: 1;
+  display: grid;
+  min-width: 0;
+}
+
+/* Long names wrap onto a second line rather than being cut off. */
+.tile-name {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  font-weight: 600;
+  line-height: 1.25;
+  hyphens: auto;
+}
+
+.tile-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.tile-meta:empty {
+  display: none;
+}
+
+.tile-plus {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.tile-plus .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.tile-add:hover .tile-plus {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tile.on .tile-add {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: var(--accent-soft);
+}
+
+.tile.on .tile-meta {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Editing is a quieter, secondary action: tucked in the corner. */
+.tile-edit {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  opacity: 0;
+}
+
+.tile-edit .icon {
+  width: 13px;
+  height: 13px;
+}
+
+.tile:hover .tile-edit,
+.tile-edit:focus-visible {
+  opacity: 1;
+}
+
+/* Without hover (phones), keep it visible. */
+@media (hover: none) {
+  .tile-edit {
+    opacity: 1;
+  }
+}
+
+/* ---------- Sheets ---------- */
+
+.stepper {
+  display: flex;
+  gap: 8px;
+}
+
+.stepper .icon-btn {
+  width: 44px;
+  height: 44px;
+}
+
+.stepper .icon-btn:disabled {
+  opacity: 0.4;
+}
+
+.stepper .input {
+  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgb(10 10 20 / 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.sheet {
+  display: grid;
+  gap: 18px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  padding: 22px 18px calc(18px + env(safe-area-inset-bottom));
+  border-radius: 24px 24px 0 0;
+  background: var(--surface);
+  animation: rise 0.2s ease-out;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.sheet h2 {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  /* 16px keeps iOS from zooming in on focus. */
+  font-size: 16px;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.preset {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.preset[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* ---------- Settings ---------- */
+
+.settings-section {
+  display: grid;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.data-list {
+  display: grid;
+}
+
+.data-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.data-row + .data-row {
+  border-top: 1px solid var(--border);
+}
+
+.data-row > div {
+  display: grid;
+  gap: 2px;
+}
+
+.btn.danger-outline {
+  color: var(--danger);
+}
+
+.btn.danger-outline:hover:not(:disabled) {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+
+/* ---------- Loading and messages ---------- */
+
+.splash {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 16px;
+  color: var(--muted);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(84px + env(safe-area-inset-bottom));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--text);
+  color: var(--bg);
+  transform: translateX(-50%);
+  animation: rise 0.2s ease-out;
+}
+
+.toast button {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* ---------- Tablet and up ---------- */
+
+@media (min-width: 720px) {
+  .app {
+    padding: 20px 24px 40px;
+  }
+
+  .topbar {
+    margin-bottom: 8px;
+  }
+
+  /* Text tabs with an underline, beside the name. */
+  .tabs {
+    position: static;
+    flex: 1;
+    align-self: stretch;
+    gap: 22px;
+    margin-left: 20px;
+    padding: 0;
+    border: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  .tab {
+    flex: none;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+    padding: 16px 0 14px;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    font-size: 15px;
+  }
+
+  .tab .icon {
+    display: none;
+  }
+
+  .tab:hover {
+    color: var(--text);
+  }
+
+  .tab[aria-current='page'] {
+    border-bottom-color: var(--accent);
+    color: var(--text);
+  }
+
+  .tab-count {
+    position: static;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    color: var(--muted);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .addbar {
+    margin: -12px -24px 0;
+    padding: 12px 24px 0;
+  }
+
+  .options {
+    inset-inline: 24px;
+  }
+
+  .suggestion-row {
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .overlay {
+    align-items: center;
+  }
+
+  .sheet {
+    border-radius: 24px;
+  }
+
+  .toast {
+    bottom: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- Settings extras ---------- */
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.switch-row > div {
+  display: grid;
+  gap: 4px;
+}
+
+.switch-row .field-label {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+
+.switch {
+  position: relative;
+  flex: none;
+  width: 51px;
+  height: 31px;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background 0.2s;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+  transition: transform 0.2s;
+}
+
+.switch[aria-checked='true'] {
+  background: var(--accent);
+}
+
+.switch[aria-checked='true']::after {
+  transform: translateX(20px);
+}
+
+/* ---------- Glass look ----------
+   Translucent, blurred panels floating over a soft colour wash. Everything
+   here only applies with data-look='glass'; the colour variables are
+   overridden so the existing components pick the new look up on their own. */
+
+:root[data-look='glass'] {
+  --wash:
+    linear-gradient(to bottom, var(--bg), transparent 220px),
+    radial-gradient(60% 45% at 12% 8%, rgb(150 140 255 / 0.2), transparent 70%),
+    radial-gradient(55% 40% at 95% 22%, rgb(255 160 210 / 0.16), transparent 70%),
+    radial-gradient(70% 50% at 65% 100%, rgb(120 220 255 / 0.2), transparent 70%),
+    linear-gradient(#f5f5f8, #f0f4f9);
+  --bg: #f5f5f8;
+  --surface: rgb(255 255 255 / 0.52);
+  --surface-strong: rgb(255 255 255 / 0.78);
+  /* Controls need a tint of their own: white on white would disappear. */
+  --surface-2: rgb(70 70 140 / 0.07);
+  --border: rgb(70 70 140 / 0.17);
+  --edge: rgb(255 255 255 / 0.8);
+  --accent-soft: rgb(29 138 74 / 0.13);
+  --shadow: 0 10px 34px rgb(60 60 140 / 0.14), inset 0 1px 0 rgb(255 255 255 / 0.85);
+  --blur: blur(26px) saturate(180%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-look='glass']:not([data-theme='light']) {
+    --wash:
+      linear-gradient(to bottom, var(--bg), transparent 220px),
+      radial-gradient(60% 45% at 12% 8%, rgb(92 74 255 / 0.18), transparent 70%),
+      radial-gradient(55% 40% at 95% 25%, rgb(214 62 160 / 0.12), transparent 70%),
+      radial-gradient(70% 50% at 60% 100%, rgb(30 170 200 / 0.13), transparent 70%),
+      linear-gradient(#0f0f13, #0e0e1c);
+    --bg: #0f0f13;
+    --surface: rgb(255 255 255 / 0.08);
+    --surface-strong: rgb(34 34 52 / 0.82);
+    --surface-2: rgb(255 255 255 / 0.07);
+    --border: rgb(255 255 255 / 0.14);
+    --edge: rgb(255 255 255 / 0.14);
+    --accent-soft: rgb(79 207 133 / 0.18);
+    --shadow: 0 10px 34px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.14);
+  }
+}
+
+:root[data-look='glass'][data-theme='dark'] {
+  --wash:
+    linear-gradient(to bottom, var(--bg), transparent 220px),
+    radial-gradient(60% 45% at 12% 8%, rgb(92 74 255 / 0.18), transparent 70%),
+    radial-gradient(55% 40% at 95% 25%, rgb(214 62 160 / 0.12), transparent 70%),
+    radial-gradient(70% 50% at 60% 100%, rgb(30 170 200 / 0.13), transparent 70%),
+    linear-gradient(#0f0f13, #0e0e1c);
+  --bg: #0f0f13;
+  --surface: rgb(255 255 255 / 0.08);
+  --surface-strong: rgb(34 34 52 / 0.82);
+  --surface-2: rgb(255 255 255 / 0.07);
+  --border: rgb(255 255 255 / 0.14);
+  --edge: rgb(255 255 255 / 0.14);
+  --accent-soft: rgb(79 207 133 / 0.18);
+  --shadow: 0 10px 34px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+
+:root[data-look='glass'] body {
+  background: var(--bg);
+}
+
+/* The colour wash stays put while the content scrolls over it. */
+:root[data-look='glass'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--wash);
+}
+
+:root[data-look='glass'] .card,
+:root[data-look='glass'] .tile-add,
+:root[data-look='glass'] .addbar-field,
+:root[data-look='glass'] .searchbar,
+:root[data-look='glass'] .suggestion-add,
+:root[data-look='glass'] .segmented,
+:root[data-look='glass'] .btn,
+:root[data-look='glass'] .icon-btn,
+:root[data-look='glass'] .toast {
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-look='glass'] .card {
+  border-color: var(--edge);
+  border-radius: 26px;
+}
+
+:root[data-look='glass'] .btn,
+:root[data-look='glass'] .icon-btn {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+
+:root[data-look='glass'] .btn.primary {
+  background: var(--accent);
+}
+
+:root[data-look='glass'] .btn.danger {
+  background: transparent;
+}
+
+:root[data-look='glass'] .segmented {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+:root[data-look='glass'] .segmented button[aria-pressed='true'] {
+  background: var(--surface-strong);
+  box-shadow:
+    0 2px 10px rgb(0 0 0 / 0.1),
+    inset 0 1px 0 rgb(255 255 255 / 0.5);
+}
+
+/* A floating glass bar instead of an edge-to-edge strip, as in Tidy. */
+:root[data-look='glass'] .tabs {
+  inset: auto 14px calc(12px + env(safe-area-inset-bottom)) 14px;
+  padding: 6px;
+  border: 1px solid var(--edge);
+  border-radius: 30px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-look='glass'] .tab[aria-current='page'] {
+  background: var(--surface-strong);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5);
+}
+
+@media (min-width: 720px) {
+  :root[data-look='glass'] .tabs {
+    inset: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root[data-look='glass'] .tab[aria-current='page'] {
+    background: none;
+    box-shadow: none;
+  }
+}
+
+:root[data-look='glass'] .sheet {
+  background: var(--surface-strong);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border-top: 1px solid var(--edge);
+}
+
+:root[data-look='glass'] .input {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+
+:root[data-look='glass'] .addbar-field,
+:root[data-look='glass'] .searchbar,
+:root[data-look='glass'] .suggestion-add,
+:root[data-look='glass'] .tile-add,
+:root[data-look='glass'] .section-chip {
+  background: var(--surface);
+  border-color: var(--edge);
+}
+
+:root[data-look='glass'] .tile.on .tile-add {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: var(--accent-soft);
+}
+
+/* The colour wash shows through; a flat strip behind the add bar would stand out. */
+:root[data-look='glass'] .addbar {
+  background: none;
+}
+
+/* The dropdown sits over the list, so it needs to be solid enough to read. */
+:root[data-look='glass'] .options {
+  background: var(--surface-strong);
+}
+
+:root[data-look='glass'] .group + .group,
+:root[data-look='glass'] .product + .product {
+  border-color: var(--border);
+}
+
+/* ---------- Desktop sidebar ----------
+   Only on wide screens: the list keeps the left column and a dashboard sits beside it. */
+
+.list-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+}
+
+.side {
+  display: none;
+}
+
+.side-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.side-card .group-title {
+  padding: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stat {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.stat b {
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.side-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.side-row + .side-row,
+.trip + .trip {
+  border-top: 1px solid var(--border);
+}
+
+.side-row-text {
+  flex: 1;
+  display: grid;
+  min-width: 0;
+}
+
+.side-row-text small {
+  font-size: 12px;
+}
+
+.icon-btn.small {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+}
+
+.icon-btn.small .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-btn.ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 8px 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chip-btn:hover {
+  border-color: var(--accent);
+}
+
+.chip-btn .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
+}
+
+.trip {
+  display: grid;
+  gap: 4px;
+  padding: 10px 0;
+}
+
+.trip-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trip-items {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+:root[data-look='glass'] .icon-btn.ghost {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+@media (min-width: 1080px) {
+  .app {
+    max-width: 1180px;
+  }
+
+  .list-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .side {
+    position: sticky;
+    top: 0;
+    display: grid;
+    gap: 16px;
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+    /* Room for the cards' shadows inside the scroll box, so they aren't clipped into a band. */
+    margin: -20px -24px 0;
+    padding: 20px 24px 40px;
+    scrollbar-width: none;
+  }
+
+  .side::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The sidebar shows the suggestions instead. */
+  .list-main > .suggestions {
+    display: none;
+  }
+
+  .addbar {
+    margin: -12px 0 0;
+    padding: 12px 0 0;
+  }
+
+  .options {
+    inset-inline: 0;
+  }
+}
