@@ -4,7 +4,6 @@ import type { CategoryId } from '../../shared/categories.ts'
 import { capitalize, guessCategory, parseQuantity, LIKELY, search, STRONG } from '../../shared/match.ts'
 import type { Match, Target } from '../../shared/match.ts'
 import type { AddItemInput, Item } from '../../shared/types.ts'
-import { oftenBought } from '../lists.ts'
 import { CategoryIcon, PlusIcon } from './bits.tsx'
 
 /** What to add, plus enough to show it on the list before the server answers. */
@@ -33,20 +32,15 @@ export function AddBar({ targets, items, onAdd }: Props) {
   const listed = useMemo(() => new Map(items.map((i) => [i.productId, i])), [items])
 
   const options = useMemo((): Option[] => {
-    if (!text.trim()) {
-      // Nothing typed yet: offer what is bought most and isn't on the list.
-      return oftenBought(targets, (t) => t.productId, items, 6).map((target) => ({
-        kind: 'match',
-        match: { target, label: target.name, score: 0 },
-      }))
-    }
+    // Nothing typed yet: nothing to complete, so the list stays in view.
+    if (!text.trim()) return []
     const matches: Option[] = search(targets, parsed.name, 6).map((match) => ({ kind: 'match', match }))
     const top = matches[0]?.kind === 'match' ? matches[0].match.score : 0
     if (top >= STRONG) return matches
     // A likely match ("bre" for bread) is picked by Enter; otherwise what was typed comes first.
     const typed: Option = { kind: 'new', name: capitalize(parsed.name) }
     return top >= LIKELY ? [...matches, typed] : [typed, ...matches]
-  }, [text, parsed.name, targets, items])
+  }, [text, parsed.name, targets])
 
   function choose(option: Option) {
     const { quantity } = parsed
@@ -54,14 +48,13 @@ export function AddBar({ targets, items, onAdd }: Props) {
       onAdd({ input: { text }, name: option.name, quantity, category: guessCategory(option.name) })
     } else {
       const { target, label } = option.match
-      const prefix = text.trim() ? quantity : null
       onAdd({
         input: {
-          text: prefix ? `${prefix} ${label}` : label,
+          text: quantity ? `${quantity} ${label}` : label,
           ...(target.productId ? { productId: target.productId } : { catalogKey: target.catalogKey! }),
         },
         name: label,
-        quantity: prefix,
+        quantity,
         category: target.category,
       })
     }
@@ -129,7 +122,6 @@ export function AddBar({ targets, items, onAdd }: Props) {
 
       {showList && (
         <ul className="options card" id="addbar-options" role="listbox">
-          {!text.trim() && <li className="options-title">Often bought</li>}
           {options.map((option, i) => {
             const onList = option.kind === 'match' && option.match.target.productId
             const item = onList ? listed.get(option.match.target.productId!) : undefined
@@ -170,7 +162,7 @@ export function AddBar({ targets, items, onAdd }: Props) {
                     {item.inBasketAt ? 'In basket' : `On list · ${item.quantity ?? 1}`}
                   </span>
                 ) : (
-                  text.trim() && parsed.quantity && <span className="pill accent">{parsed.quantity}</span>
+                  parsed.quantity && <span className="pill accent">{parsed.quantity}</span>
                 )}
               </li>
             )

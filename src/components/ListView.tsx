@@ -34,7 +34,7 @@ function Row({
 }) {
   const ref = useRef<HTMLLIElement>(null)
   useEffect(() => {
-    if (flash) ref.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    if (flash) ref.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
   }, [flash])
   const inBasket = !!item.inBasketAt
   const swipe = useSwipe(onRemove, onToggle)

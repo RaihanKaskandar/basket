@@ -158,8 +158,9 @@ export default function App() {
           ? rest.map((i) => (i.id === item.id ? item : i))
           : [...rest, item]
       })
+      // Show where it landed, now that the add bar's dropdown is out of the way.
+      setFlashId(item.id)
       if (merged) {
-        setFlashId(item.id)
         setNotice({
           text: merged.inBasketAt
             ? `${item.name} is back on the list`
